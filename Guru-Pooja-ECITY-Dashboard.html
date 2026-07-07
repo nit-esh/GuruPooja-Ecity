@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guru Pooja Training Program — ECITY | Planning & Execution</title>
+<style>
+  :root{
+    --saffron:#E8751A; --saffron-d:#C85D0E; --maroon:#7A1F2B; --gold:#C9A227;
+    --cream:#FBF6EE; --ink:#2B2320; --muted:#8a7d72; --line:#eaddcb;
+    --card:#ffffff; --ok:#2E7D4F; --warn:#B8860B; --shadow:0 1px 3px rgba(90,60,20,.08),0 8px 24px rgba(90,60,20,.06);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:
+      linear-gradient(180deg,rgba(251,246,238,.90),rgba(246,238,224,.93)),
+      url('https://static.sadhguru.org/d/46272/1650453435-website-thumbnail-yogameditation-gurupooja.jpg?auto=format&fit=max&w=1600') center top/cover no-repeat fixed,
+      linear-gradient(180deg,#FCF8F1,#F6EEE0);
+    color:var(--ink);line-height:1.5;-webkit-font-smoothing:antialiased}
+  a{color:var(--saffron-d)}
+  .wrap{max-width:1150px;margin:0 auto;padding:0 20px 80px}
+  header.hero{
+    background:linear-gradient(120deg,#4a0f16 0%,var(--maroon) 55%,#8a2433 100%);
+    color:#fff;padding:40px 0 32px;margin-bottom:0;border-bottom:4px solid var(--gold)}
+  .hero-inner{max-width:1150px;margin:0 auto;padding:0 20px;display:flex;flex-wrap:wrap;gap:20px;align-items:flex-end;justify-content:space-between}
+  header.hero h1,header.hero .sub,header.hero .quote,header.hero .lamp{text-shadow:0 1px 6px rgba(0,0,0,.35)}
+  header.hero .meta{backdrop-filter:blur(3px)}
+  .lamp{font-size:34px;line-height:1}
+  h1{font-size:26px;margin:6px 0 2px;font-weight:700;letter-spacing:.2px}
+  .sub{opacity:.9;font-size:14px}
+  .quote{font-style:italic;opacity:.82;font-size:13px;margin-top:8px;max-width:560px}
+  .meta-grid{display:flex;flex-wrap:wrap;gap:10px}
+  .meta{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);border-radius:10px;padding:8px 12px;min-width:120px}
+  .meta .k{font-size:10px;text-transform:uppercase;letter-spacing:.8px;opacity:.75}
+  .meta .v{font-size:14px;font-weight:600;margin-top:2px}
+  .meta .v[contenteditable]{outline:none;border-bottom:1px dashed rgba(255,255,255,.4);cursor:text;min-width:40px;display:inline-block}
+  .meta .v[contenteditable]:focus{border-bottom:1px solid var(--gold)}
+
+  nav.tabs{position:sticky;top:0;z-index:20;background:rgba(251,246,238,.96);backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);display:flex;gap:4px;overflow-x:auto;padding:8px 20px;margin:0 -20px 22px}
+  nav.tabs button{border:0;background:transparent;padding:9px 14px;border-radius:8px;font-size:13.5px;font-weight:600;
+    color:var(--muted);cursor:pointer;white-space:nowrap;transition:.15s}
+  nav.tabs button:hover{background:#f0e6d6;color:var(--ink)}
+  nav.tabs button.active{background:var(--saffron);color:#fff}
+
+  section.panel{display:none;animation:fade .25s ease}
+  section.panel.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  h2{font-size:19px;margin:26px 0 4px;display:flex;align-items:center;gap:8px}
+  h2 .dot{width:9px;height:9px;border-radius:50%;background:var(--saffron)}
+  .lead{color:var(--muted);font-size:13.5px;margin:0 0 16px}
+
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin-top:6px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;box-shadow:var(--shadow)}
+  .card h3{margin:0 0 4px;font-size:14px}
+  .stat{font-size:30px;font-weight:800;color:var(--maroon);line-height:1}
+  .stat.small{font-size:22px}
+  .stat-cap{font-size:12px;color:var(--muted);margin-top:4px}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:760px){.grid2{grid-template-columns:1fr}}
+
+  .ck-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:20px 0 8px}
+  .progress{flex:1;min-width:160px;height:9px;background:#eee3d2;border-radius:99px;overflow:hidden}
+  .progress > i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--saffron),var(--gold));transition:width .3s}
+  .pct{font-size:12px;font-weight:700;color:var(--saffron-d);min-width:42px;text-align:right}
+
+  .cat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:6px 4px 10px;margin:12px 0;box-shadow:var(--shadow)}
+  .cat > .cat-title{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.7px;color:var(--saffron-d);
+    padding:12px 16px 8px;display:flex;align-items:center;gap:8px}
+  li.item{list-style:none;display:flex;align-items:flex-start;gap:11px;padding:8px 16px;border-top:1px solid #f4ecdf;font-size:14px}
+  ul.items{margin:0;padding:0}
+  li.item input{margin-top:3px;width:17px;height:17px;accent-color:var(--saffron);cursor:pointer;flex:0 0 auto}
+  li.item label{cursor:pointer;flex:1}
+  li.item .qty{color:var(--muted);font-size:12px;background:#f5ecdd;border-radius:6px;padding:1px 7px;white-space:nowrap}
+  li.item.done label{text-decoration:line-through;color:var(--muted)}
+  li.item .qty-in{flex:0 0 auto;width:76px;padding:3px 8px;border:1px solid var(--line);border-radius:7px;font-size:12.5px;
+    text-align:center;color:var(--maroon);font-weight:600;background:#fff}
+  li.item .qty-in::placeholder{color:#c3b6a3;font-weight:400}
+  li.item .qty-in:focus{outline:none;border-color:var(--saffron);background:#fff6e9}
+  .exp-btn{border:1px solid var(--saffron);background:#fff;color:var(--saffron-d);border-radius:8px;padding:5px 13px;
+    font-size:12.5px;font-weight:700;cursor:pointer}
+  .exp-btn:hover{background:var(--saffron);color:#fff}
+
+  .tl{position:relative;margin:10px 0 0;padding-left:6px}
+  .day{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);margin:14px 0;overflow:hidden}
+  .day-hd{background:linear-gradient(90deg,#fff6e9,#fdefd8);padding:12px 18px;font-weight:800;color:var(--maroon);
+    display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line)}
+  .day-hd .badge{font-size:11px;font-weight:700;background:var(--maroon);color:#fff;padding:3px 10px;border-radius:99px}
+  .ev{display:flex;gap:14px;padding:10px 18px;border-top:1px solid #f4ecdf;align-items:flex-start}
+  .ev:first-child{border-top:0}
+  .ev .t{font-variant-numeric:tabular-nums;font-weight:700;color:var(--saffron-d);min-width:64px;font-size:13px}
+  .ev .body{flex:1}
+  .ev .name{font-weight:600;font-size:14px}
+  .ev .note{font-size:12.5px;color:var(--muted);margin-top:2px}
+  .ev.break .name::before{content:"☕ ";}
+  .ev.session .name::before{content:"🪔 ";}
+  [contenteditable].edit{outline:none;border-radius:5px;padding:1px 4px;margin:-1px -4px;transition:.12s;cursor:text}
+  [contenteditable].edit:hover{background:#f7efe1}
+  [contenteditable].edit:focus{background:#fff6e9;box-shadow:0 0 0 1px var(--saffron)}
+  [contenteditable].edit:empty::before{content:attr(data-ph);color:#bbaa93}
+  .ev .del,.day .addev,.day-del{border:0;background:none;cursor:pointer;color:#c99;font-size:13px;border-radius:5px;padding:1px 6px}
+  .ev .del:hover,.day-del:hover{color:#b23;background:#f3d9d3}
+  .addev{border:1px dashed var(--saffron)!important;color:var(--saffron-d)!important;font-weight:600;font-size:12px;margin:8px 18px 12px;padding:3px 12px!important;background:#fff!important}
+  .addev:hover{background:var(--saffron)!important;color:#fff!important}
+  .msg pre.edit{cursor:text}
+  .msg pre.edit:focus{outline:none;background:#fff9f0;box-shadow:inset 0 0 0 1px var(--saffron)}
+  .edit-hint{font-size:12px;color:var(--muted);background:#fff8ec;border:1px solid #f0dcb4;border-left:3px solid var(--gold);border-radius:8px;padding:8px 12px;margin:0 0 14px}
+
+  table{width:100%;border-collapse:collapse;background:var(--card);border-radius:12px;overflow:hidden;box-shadow:var(--shadow)}
+  th,td{text-align:left;padding:10px 14px;border-bottom:1px solid #f4ecdf;font-size:13.5px;vertical-align:top}
+  th{background:#fbf3e6;color:var(--maroon);font-size:11px;text-transform:uppercase;letter-spacing:.6px}
+  tr:last-child td{border-bottom:0}
+  .chip{display:inline-block;background:#f5ecdd;border-radius:6px;padding:1px 8px;font-size:12px;margin:2px 3px 2px 0}
+  .role{font-weight:700;color:var(--maroon)}
+  .unassigned{color:#b23;font-weight:600;background:#fdece9;border-radius:6px;padding:1px 8px;font-size:12px}
+  .ename{display:inline-flex;align-items:center;gap:5px;background:#f5ecdd;border:1px solid #e7dcc8;border-radius:7px;
+    padding:2px 4px 2px 9px;font-size:13px;margin:2px 4px 2px 0;transition:.15s}
+  .ename:focus-within{border-color:var(--saffron);background:#fff6e9}
+  .ename.empty{background:#fdece9;border-color:#f5c6bd}
+  .ename .txt{outline:none;min-width:26px;cursor:text;font-weight:500}
+  .ename.empty .txt{color:#b23}
+  .ename.empty .txt:empty::before{content:"assign…";color:#c66;font-weight:600}
+  .ename .txt:empty::before{content:"name";color:#bbaa93}
+  .ename .del{border:0;background:none;color:#b99;cursor:pointer;font-size:13px;line-height:1;padding:0 3px;border-radius:5px}
+  .ename .del:hover{color:#b23;background:#f3d9d3}
+  .add-name{border:1px dashed var(--saffron);background:#fff;color:var(--saffron-d);border-radius:7px;
+    padding:2px 10px;font-size:12.5px;font-weight:600;cursor:pointer;margin:2px 0}
+  .add-name:hover{background:var(--saffron);color:#fff}
+  .team-hint{font-size:12px;color:var(--muted);background:#fff8ec;border:1px solid #f0dcb4;border-left:3px solid var(--gold);
+    border-radius:8px;padding:8px 12px;margin:0 0 14px}
+
+  .msg{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);margin:14px 0;overflow:hidden}
+  .msg-hd{background:#fbf3e6;padding:11px 16px;font-weight:700;color:var(--maroon);display:flex;justify-content:space-between;align-items:center}
+  .msg-hd button{border:1px solid var(--saffron);background:#fff;color:var(--saffron-d);border-radius:7px;padding:4px 11px;font-size:12px;font-weight:600;cursor:pointer}
+  .msg-hd button:active{background:var(--saffron);color:#fff}
+  .msg pre{margin:0;padding:14px 16px;white-space:pre-wrap;font-family:inherit;font-size:13.5px;color:#3a302a}
+
+  .note-box{background:#fff8ec;border:1px solid #f0dcb4;border-left:4px solid var(--gold);border-radius:10px;padding:12px 16px;font-size:13.5px;margin:14px 0}
+  .foot{text-align:center;color:var(--muted);font-size:12px;margin-top:40px}
+  .reset{background:none;border:1px solid var(--line);color:var(--muted);border-radius:8px;padding:5px 12px;font-size:12px;cursor:pointer}
+  .menu-day{border-radius:14px;overflow:hidden;box-shadow:var(--shadow);border:1px solid var(--line);background:#fff}
+  .menu-day h4{margin:0;background:linear-gradient(90deg,var(--saffron),var(--saffron-d));color:#fff;padding:10px 16px;font-size:14px}
+  .menu-day .row{display:flex;gap:10px;padding:9px 16px;border-top:1px solid #f4ecdf;font-size:13px}
+  .menu-day .row b{min-width:96px;color:var(--maroon);font-size:12px}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="hero-inner">
+    <div>
+      <h1>Guru Pooja Training Program — Electronic City</h1>
+      <div class="sub">Planning &amp; Execution Dashboard · Isha, Bengaluru</div>
+      <div class="quote">"Guru Pooja is a device to invite a dimension that dispels your darkness." — Sadhguru</div>
+    </div>
+    <div class="meta-grid">
+      <div class="meta"><div class="k">Dates</div><div class="v" contenteditable data-key="dates">TBD · Fri–Sun</div></div>
+      <div class="meta"><div class="k">Time</div><div class="v" contenteditable data-key="time">8:00 AM – 7:00 PM</div></div>
+      <div class="meta"><div class="k">Venue</div><div class="v" contenteditable data-key="venue">Electronic City</div></div>
+      <div class="meta"><div class="k">Teacher</div><div class="v" contenteditable data-key="teacher">Radhika</div></div>
+      <div class="meta"><div class="k">Organizers</div><div class="v" contenteditable data-key="org">Suhruth / Nitesh</div></div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <nav class="tabs" id="tabs">
+    <button class="active" data-tab="overview">Overview</button>
+    <button data-tab="timeline">Timeline</button>
+    <button data-tab="team">Core Team</button>
+    <button data-tab="materials">Materials</button>
+    <button data-tab="menu">Menu</button>
+    <button data-tab="pointers">Execution Notes</button>
+    <button data-tab="registration">Registration</button>
+    <button data-tab="messages">Message Templates</button>
+  </nav>
+
+  <!-- OVERVIEW -->
+  <section class="panel active" id="overview">
+    <h2><span class="dot"></span>Program at a glance</h2>
+    <p class="lead">A 3-day residential-style training (Fri–Sun) for ~50 participants, preceded by a Day-0 setup. Edit the header fields above to lock in ECITY dates and venue.</p>
+    <div class="cards">
+      <div class="card"><h3>Duration</h3><div class="stat">3<span style="font-size:16px"> days</span></div><div class="stat-cap">+ Day 0 setup · 8am–7pm</div></div>
+      <div class="card"><h3>Class size</h3><div class="stat">~50</div><div class="stat-cap">participants (10 demo stations, 1:5)</div></div>
+      <div class="card"><h3>Demo stations</h3><div class="stat">11</div><div class="stat-cap">10 for participants + 1 for teacher</div></div>
+    </div>
+
+    <div class="grid2" style="margin-top:22px">
+      <div class="card">
+        <h3>Overall readiness</h3>
+        <div class="ck-head" style="margin:10px 0 0">
+          <div class="progress"><i id="ov-bar"></i></div><div class="pct" id="ov-pct">0%</div>
+        </div>
+        <div class="stat-cap" id="ov-detail" style="margin-top:8px">Tracks every checklist item across Materials, Timeline prep &amp; Execution notes.</div>
+      </div>
+      <div class="card">
+        <h3>Key flow each day</h3>
+        <div style="font-size:13.5px;line-height:1.9;color:#463a32">
+          Registration → Session → Breakfast (9:30) → Water → Lunch (12:45) → Water → Snacks (17:10) → Presence time (18:20) → Close (18:30)
+        </div>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <b>Before you start:</b> Confirm ECITY <b>dates</b>, <b>venue address &amp; map link</b>, and fill the <b>Unassigned</b> roles on the Core Team tab (AV, Kitchen, Ushering, Test coordinator, Hygiene, Deepa &amp; flowers). Your checklist ticks are saved in this browser automatically.
+    </div>
+  </section>
+
+  <!-- TIMELINE -->
+  <section class="panel" id="timeline">
+    <h2><span class="dot"></span>Day-by-day timeline</h2>
+    <p class="lead">Break timings are inherited from past ECITY/Jayanagar runs — adjust on the day per the teacher's flow.</p>
+    <div class="edit-hint">✏️ Click any time, activity or note to edit it. Use <b>+ Add event</b> per day and ✕ to remove. Changes save automatically.</div>
+    <div id="timeline-body" class="tl"></div>
+    <button class="reset" style="margin-top:12px" onclick="tlReset()">Reset timeline to defaults</button>
+  </section>
+
+  <!-- TEAM -->
+  <section class="panel" id="team">
+    <h2><span class="dot"></span>Core team &amp; roles</h2>
+    <p class="lead">Filled roles carried from planning; assign the highlighted gaps.</p>
+    <div class="team-hint">✏️ Click any name to edit it, use <b>+ Add name</b> to assign more volunteers, and ✕ to remove. Red chips are still unassigned. Changes save automatically.</div>
+    <div id="team-body"></div>
+    <button class="reset" style="margin-top:12px" onclick="teamReset()">Reset to defaults</button>
+  </section>
+
+  <!-- MATERIALS -->
+  <section class="panel" id="materials">
+    <h2><span class="dot"></span>Materials &amp; setup checklist</h2>
+    <p class="lead">Tick items as they are sourced/packed. Progress saves automatically.</p>
+    <div class="ck-head">
+      <div class="progress"><i id="mat-bar"></i></div><div class="pct" id="mat-pct">0%</div>
+      <button class="exp-btn" onclick="exportMaterialsCSV()">⬇ Export CSV</button>
+      <button class="reset" onclick="resetGroup('mat')">Reset</button>
+    </div>
+    <div id="materials-body"></div>
+  </section>
+
+  <!-- MENU -->
+  <section class="panel" id="menu">
+    <h2><span class="dot"></span>Food &amp; menu plan</h2>
+    <p class="lead">Sattvic menu across 3 days. Volunteer-prepared items marked; caterer handles the rest.</p>
+    <div class="cards" id="menu-body" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr))"></div>
+    <div class="note-box" style="margin-top:18px">
+      <b>Notes:</b> No groundnuts on Day 3 · Diabetics get apple instead of banana · Snacks must be ready by 4:30, served 5:10 · Day-2 lunch keep ganji + fruit for teacher (no lunch break for teacher) · Day-3 snack comes with lunch delivery (early close).
+    </div>
+  </section>
+
+  <!-- POINTERS -->
+  <section class="panel" id="pointers">
+    <h2><span class="dot"></span>Execution pointers</h2>
+    <p class="lead">On-ground reminders by area. Tick as confirmed.</p>
+    <div class="ck-head">
+      <div class="progress"><i id="pt-bar"></i></div><div class="pct" id="pt-pct">0%</div>
+      <button class="reset" onclick="resetGroup('pt')">Reset</button>
+    </div>
+    <div id="pointers-body"></div>
+  </section>
+
+  <!-- REGISTRATION -->
+  <section class="panel" id="registration">
+    <h2><span class="dot"></span>Registration status tracker</h2>
+    <p class="lead">Log each day's registration count — cumulative total and the chart update automatically. Pre-seeded with the July 17–19 batch; edit the program label and clear/replace with ECITY numbers.</p>
+
+    <div class="cards" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr))">
+      <div class="card"><h3>Total registered</h3><div class="stat" id="reg-total">0</div><div class="stat-cap" id="reg-target-cap">of ~50 target</div></div>
+      <div class="card"><h3>Latest day</h3><div class="stat small" id="reg-latest">—</div><div class="stat-cap" id="reg-latest-date">no entries yet</div></div>
+      <div class="card"><h3>Days logged</h3><div class="stat" id="reg-days">0</div><div class="stat-cap">entries recorded</div></div>
+      <div class="card"><h3>Fill vs target</h3><div class="ck-head" style="margin:6px 0 0"><div class="progress"><i id="reg-bar"></i></div><div class="pct" id="reg-pct">0%</div></div><div class="stat-cap" style="margin-top:8px">Editable target below</div></div>
+    </div>
+
+    <div class="card" style="margin-top:18px">
+      <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end">
+        <div><label style="font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted)">Program label</label><br>
+          <input id="reg-label" type="text" style="padding:8px 10px;border:1px solid var(--line);border-radius:8px;font-size:14px;min-width:220px"></div>
+        <div><label style="font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted)">Target</label><br>
+          <input id="reg-target" type="number" min="1" style="padding:8px 10px;border:1px solid var(--line);border-radius:8px;font-size:14px;width:90px"></div>
+      </div>
+    </div>
+
+    <div class="grid2" style="margin-top:18px;grid-template-columns:1.1fr 1fr">
+      <div class="card">
+        <h3 style="margin-bottom:10px">Add / edit entries</h3>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end">
+          <div><label style="font-size:11px;color:var(--muted)">Date</label><br>
+            <input id="reg-date" type="text" placeholder="e.g. 5-July" style="padding:8px 10px;border:1px solid var(--line);border-radius:8px;font-size:14px;width:130px"></div>
+          <div><label style="font-size:11px;color:var(--muted)">Count that day</label><br>
+            <input id="reg-count" type="number" min="0" placeholder="0" style="padding:8px 10px;border:1px solid var(--line);border-radius:8px;font-size:14px;width:110px"></div>
+          <button id="reg-add" style="background:var(--saffron);color:#fff;border:0;border-radius:8px;padding:9px 16px;font-weight:700;font-size:14px;cursor:pointer">Add</button>
+        </div>
+        <table style="margin-top:14px">
+          <thead><tr><th>Date</th><th style="text-align:right">Daily</th><th style="text-align:right">Cumulative</th><th></th></tr></thead>
+          <tbody id="reg-tbody"></tbody>
+        </table>
+        <button class="reset" style="margin-top:10px" onclick="regClear()">Clear all entries</button>
+      </div>
+      <div class="card">
+        <h3 style="margin-bottom:10px">Registration curve</h3>
+        <div id="reg-chart"></div>
+        <div style="display:flex;gap:16px;margin-top:10px;font-size:12px;color:var(--muted)">
+          <span><i style="display:inline-block;width:11px;height:11px;background:var(--saffron);border-radius:3px;vertical-align:middle"></i> Daily count</span>
+          <span><i style="display:inline-block;width:14px;height:3px;background:var(--maroon);vertical-align:middle"></i> Cumulative</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MESSAGES -->
+  <section class="panel" id="messages">
+    <h2><span class="dot"></span>Message &amp; email templates</h2>
+    <p class="lead">Ready-to-adapt copy. Click a title or the message body to edit; Copy grabs your edited version.</p>
+    <div class="edit-hint">✏️ Click any title or message text to edit it. Copy uses your edited version. Changes save automatically.</div>
+    <div id="messages-body"></div>
+    <button class="reset" style="margin-top:4px" onclick="msgReset()">Reset templates to defaults</button>
+  </section>
+
+  <div class="foot">Guru Pooja ECITY · consolidated from the planning workbook · checklist state stored locally in your browser.</div>
+</div>
+
+<script>
+/* ---------------- DATA ---------------- */
+const TIMELINE = [
+  {day:"Day 0 — Setup", badge:"Prep", events:[
+    {t:"", name:"Setup & checks", note:"Wash GP sets with tamarind · wash main lamp & dust sannidhi · sweep/mop hall, verandah & kitchen · dust windows/doors & inside hall · change amplifier whites · wrap teacher-chair whites"},
+    {t:"", name:"Logistics checks", note:"Check cylinder · tent material · groceries · AV · registration forms + name tags"},
+  ]},
+  {day:"Day 1", badge:"Fri", events:[
+    {t:"07:00", name:"Registrations", note:"Forms + name tags · collect forms", session:false},
+    {t:"08:00", name:"Sessions begin", note:"", session:true},
+    {t:"09:40", name:"Breakfast break (20 min)", note:"Collect & place name tags · ushering 5 min before", brk:true},
+    {t:"11:30", name:"Water break (10 min)", note:"Ushering 3 min before", brk:true},
+    {t:"12:45", name:"Lunch (45 min)", note:"Collect & place name tags · ushering 5 min before", brk:true},
+    {t:"15:00", name:"Water break (10 min)", note:"Ushering 3 min before", brk:true},
+    {t:"17:10", name:"Snacks break (20 min)", note:"Collect & place name tags · ushering 5 min before", brk:true},
+    {t:"18:20", name:"Presence time", note:""},
+    {t:"18:30", name:"Closing", note:"Collect name tags · Prep for Day 2: set up 11 demo sets (1 per 5 ppts + 1 for teacher)"},
+  ]},
+  {day:"Day 2", badge:"Sat", events:[
+    {t:"08:00", name:"Sessions", note:"", session:true},
+    {t:"09:30", name:"Breakfast break (20 min)", note:"Name tags · offering for all demo sets · ushering 5 min before", brk:true},
+    {t:"11:20", name:"Water break (10 min)", note:"Orientation for demo vols · ushering 3 min before", brk:true},
+    {t:"12:45", name:"Lunch (45 min)", note:"Name tags · sweep/mop hall · set up demo sets", brk:true},
+    {t:"16:00", name:"Water break (10 min)", note:"Ushering 3 min before", brk:true},
+    {t:"17:10", name:"Snacks break (20 min)", note:"Name tags · ushering 5 min before", brk:true},
+    {t:"18:20", name:"Presence time", note:""},
+    {t:"18:30", name:"Closing", note:"Prep Day 3: check sets (clipboard, chant sheet, 10 small sheets, pen, pencil+eraser, A4) · test set (names sheet, clipboard, pen) · 3 demo sets · chant sheets ready"},
+  ]},
+  {day:"Day 3", badge:"Sun", events:[
+    {t:"08:00", name:"Sessions", note:"Offering for all demo sets", session:true},
+    {t:"09:30", name:"Breakfast break (20 min)", note:"Name tags · place demo sets · place check set", brk:true},
+    {t:"11:30", name:"Water break (10 min)", note:"", brk:true},
+    {t:"13:00", name:"Lunch (45 min)", note:"Name tags", brk:true},
+    {t:"15:00", name:"Water break (10 min)", note:"", brk:true},
+    {t:"—", name:"Closing (early)", note:"Collect name tags · snacks served with close"},
+  ]},
+];
+
+const TEAM = [
+  {role:"Teacher", names:["Radhika"]},
+  {role:"Program Organizer", names:["Suhruth","Nitesh"]},
+  {role:"Supporting Coordinators", names:["Rashmi","Pragya"]},
+  {role:"Observing Ishanga", names:["—"]},
+  {role:"Chant support", names:["Mamta","Sumithra","Dhaanya","Pragya","Ankur","Nitesh","Rashmi","Madhav","Ganesh","Rohankant"]},
+  {role:"Demo support", names:["Pragya","Ankur","Nitesh","Rashmi","Madhav","Sumithra"]},
+  {role:"AV", names:["Not assigned"]},
+  {role:"Kitchen", names:["Not assigned"]},
+  {role:"Ushering / head count", names:["Not assigned"]},
+  {role:"Test coordinator", names:["Not assigned"]},
+  {role:"Hygiene & Outside", names:["Not assigned","Not assigned"]},
+  {role:"Deepa & flowers", names:["Not assigned"]},
+];
+
+const MATERIALS = {
+  "Stage set up":["Satsang Photo","Lamp","Whites for photo set up — 1 Zari white + 2 whites","Gaada cloth for stage — 6 Big","Chair and cloth for photo"],
+  "AV Material":["Speakers","Wires","Projector and remote","Screen","Battery","UPS","Mike Stand and Cable"],
+  "Hall Set up":["Carpets","2 standing fans","Agarbatti and stands","Teacher table","Vibhuti","Dasaangam","Saamrani"],
+  "Guru Pooja / Demo stations":["Guru Pooja kits — 1 station per 5 ppts + 1 orientation","Oil","Wick","Match boxes + small bowl for used stick + tissue","Base white cloth — 24×30 in, neatly stitched","Offering — vastram, fruit, coconut, beetle leaves, nuts, chandanam, water, akshatham, agarbatti, camphor","Main deepa + plate + chimney (freshly prepared akshatam)"],
+  "Print Material":["Registration Forms","Guru Pooja Handouts","Name tags","Pouches with pins"],
+  "Signages":["Please maintain silence","Switch off mobiles","Rest Rooms","Foot wear","Diabetic"],
+  "Water Points":["Water Cans","Dispensers","Drip bowls"],
+  "Cleaning Material":["Lizol","Hand Wash","Vessel wash","Pitambari (GP set wash)","Mops","Water hose pipe","Brooms","Foot mats","Air freshener","Garbage bags — extra large"],
+  "Tent / Kitchen Material":["Kanji prep vessel","Covering plate","Stirrer","Large mixing vessel","Buckets ×2","Jugs ×2","Serving spoon","Tables ×2","Tumblers","First aid kit","Clipboards","Sheets","Pens"],
+};
+
+const MENU = [
+  {day:"Day 1", rows:[
+    ["Breakfast (9:30)","Sanjeevani · Banana (apple for diabetic) · soaked groundnut"],
+    ["Lunch (12:45)","Salad: Beetroot (IE) · Poriyal/Saagu · Dal · Chapathi · Rasam · white rice · buttermilk · pickle · salt"],
+    ["Snacks (5:10)","Hot Lime · Green gram sundal (vols) · Peanut chikki (vols)"],
+  ]},
+  {day:"Day 2", rows:[
+    ["Breakfast (9:30)","Saame millet ganji + moong dal (sweet) · Banana (apple diabetic) · soaked groundnut"],
+    ["Lunch (12:45)","Salad: Cucumber (IE) · Kootu · Palak dal · Chapathi · white rice · buttermilk · pickle · salt"],
+    ["Snacks (5:10)","Panaka · Sundal brown channa (vols) · Coconut-jaggery burfi (vols)"],
+  ]},
+  {day:"Day 3", rows:[
+    ["Breakfast (9:30)","Saame millet ganji with vegetables (salt) · Fruit salad · (no groundnuts)"],
+    ["Lunch (13:00)","Salad: Carrot (IE) · Veg rice/pulav · cucumber raita · chapathi · veg palya · moong dal jaggery payasa · buttermilk · pickle · salt"],
+    ["Snacks","Fruit · Millet laddu"],
+  ]},
+];
+
+const POINTERS = {
+  "Registration":["Prepare name tags on set-up day","Check number of Guru Pooja forms","Check IE completion for spot registrations","Get email IDs of all spot-registration participants"],
+  "Ushering":["3 volunteers start calling registered ppts 5 min before start on Day 1","Start ushering 8 min before long break","Start ushering 5 min before short (water) break","Head count to teacher; confirm when everyone is in"],
+  "Hygiene & Water":["Rest rooms cleaned after every break","2 water points with cans + 3–4 clean glasses each"],
+  "Kitchen":["Check kettle works","Thermos 1: warm water with honey","Thermos 2: plain warm water","Day-2 lunch: keep ganji + fruit for teacher (no lunch time)","Day-3 snack comes with food (early close)","Coordinate tent material","Check cylinder","Order 15 water cans","Order dry groceries, vegetables & fruits","Confirm caterer plates/bowls/tumblers/spoons (cross-check IP stock)"],
+  "Hall":["Day 0 & 1: 1 Guru Pooja set ready with offering","Day 2: 10 demo stations (1:5), demo vols in whites","Day 3: 3 demo stations","Flowers for demo on Day 2 & 3","Coconuts, vastram, beetle leaves & nuts as backup"],
+};
+
+const MESSAGES = [
+  {title:"Volunteering message", body:`🌺🌺🌺 *Volunteering for Guru Pooja Program*
+Namaskaram
+🪔 "Guru Pooja is a device to invite a dimension that dispels your darkness." - Sadhguru
+
+Guru Pooja program is scheduled at *[ECITY venue]* from *[dates]*.
+Please fill the form if you wish to volunteer for the program
+[form link]
+Pranam`},
+  {title:"Promo message", body:`*Guru Pooja Training*
+
+🪔 Guru Pooja is a device to invite a dimension that dispels your darkness. - Sadhguru
+
+🌸 Guru Pooja is a certain science of using chants and offerings to manifest a powerful experience in your living space.
+To know more: https://isha.sadhguru.org/yoga/yoga-programs/guru-pooja/
+
+🗓️ *Dates:* [dates]
+🕰️ *Time:* 8 am to 7 pm
+📍 *Venue:* [ECITY venue] ([map link])
+🔗 *Registration:* [reg link]`},
+  {title:"Reminder email (participants)", body:`Namaskaram,
+
+Greetings from Isha Foundation!
+We are happy to confirm your registration for the 3-day Guru Pooja Training Program starting on [date], Bangalore.
+
+Date: [dates] (Friday to Sunday)
+Time: 8:00 am to 7:00 pm (Full day)
+Venue: [ECITY venue]
+Map: [map link]
+
+Please note:
+• Reach the venue by 7.15 am on Day 1 to complete registration.
+• Carry your e-pass (soft copy is sufficient).
+• Bring a cushion or yoga mat to sit comfortably. No practices at the venue.
+• Full participation required for all sessions; please be on time.
+• Mobile phones switched off during sessions.
+• Program includes breakfast, lunch and evening snacks.
+
+For queries, please contact <<>>
+
+Pranam,
+Isha Volunteers`},
+  {title:"Post-program mail", body:`Namaskaram,
+
+In order to practice the tune of the Guru Pooja, you may take the support of audio using the following link:
+
+https://on.soundcloud.com/6nzarEyBtMoQXENy5
+
+To practice the words and pronunciation, use the Guru Pooja chant sheet provided in class.
+
+Kindly hold the above audio file as sacred and do not share it with anyone.
+
+Pranam,
+Isha Volunteer`},
+  {title:"Enquired but not paid", body:`Namaskaram,
+It is wonderful to know your interest in the *Guru Pooja Training program*. The payment link has been sent to your mail id from *no-reply@ishafoundation.org*. Please check spam folder if you are unable to find it in the inbox. Request you to close the registration as early as possible.
+Pranam
+Isha ECITY Volunteers`},
+  {title:"Practice correction invite", body:`Namaskaram,
+We invite you for Guru Pooja practice correction session.
+
+🗓️: *[date]*
+🕰️: *[time]*
+🏛️: *[ECITY venue]*
+
+You can come anytime during the session and get your chant and offerings method checked.
+We welcome you to make use of this opportunity.
+
+Pranam,
+Isha Volunteers`},
+];
+
+/* ---------------- RENDER ---------------- */
+const $ = s=>document.querySelector(s);
+const el = (t,c,h)=>{const e=document.createElement(t); if(c)e.className=c; if(h!=null)e.innerHTML=h; return e;};
+
+// Tabs
+document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('#tabs button').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active'); $('#'+b.dataset.tab).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+
+// Editable header persistence
+document.querySelectorAll('.meta .v[contenteditable]').forEach(v=>{
+  const k='gp_meta_'+v.dataset.key;
+  const saved=localStorage.getItem(k); if(saved) v.textContent=saved;
+  v.addEventListener('blur',()=>localStorage.setItem(k,v.textContent.trim()));
+});
+
+// Timeline (editable)
+function tlLoad(){try{const j=JSON.parse(localStorage.getItem('gp_timeline'));if(Array.isArray(j))return j;}catch(e){} return JSON.parse(JSON.stringify(TIMELINE));}
+let TLDATA=tlLoad();
+function tlSave(){localStorage.setItem('gp_timeline',JSON.stringify(TLDATA));}
+function edSpan(cls,val,ph,onsave){
+  const s=el('div',cls+' edit'); s.contentEditable='true'; s.textContent=val||''; if(ph)s.dataset.ph=ph;
+  s.addEventListener('blur',()=>onsave(s.textContent.trim()));
+  s.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey&&cls!=='note'){e.preventDefault();s.blur();}});
+  return s;
+}
+function tlRender(){
+  const tb=$('#timeline-body'); tb.innerHTML='';
+  TLDATA.forEach((d,di)=>{
+    const day=el('div','day');
+    const hd=el('div','day-hd');
+    const lbl=edSpan('','',null,v=>{TLDATA[di].day=v;tlSave();}); lbl.textContent=d.day; lbl.style.flex='1';
+    const badge=el('span','badge edit'); badge.contentEditable='true'; badge.textContent=d.badge||'';
+    badge.addEventListener('blur',()=>{TLDATA[di].badge=badge.textContent.trim();tlSave();});
+    const ddel=el('button','day-del','✕ day'); ddel.title='Remove day';
+    ddel.onclick=()=>{if(confirm('Remove '+(d.day||'this day')+'?')){TLDATA.splice(di,1);tlSave();tlRender();}};
+    hd.append(lbl,badge,ddel); day.appendChild(hd);
+    (d.events||[]).forEach((ev,ei)=>{
+      const cls='ev'+(ev.brk?' break':'')+(ev.session?' session':'');
+      const row=el('div',cls);
+      const t=edSpan('t',ev.t,'time',v=>{TLDATA[di].events[ei].t=v;tlSave();});
+      const body=el('div','body');
+      const name=edSpan('name',ev.name,'activity',v=>{TLDATA[di].events[ei].name=v;tlSave();});
+      const note=edSpan('note',ev.note,'notes (optional)',v=>{TLDATA[di].events[ei].note=v;tlSave();});
+      body.append(name,note);
+      const del=el('button','del','✕'); del.title='Remove event';
+      del.onclick=()=>{TLDATA[di].events.splice(ei,1);tlSave();tlRender();};
+      row.append(t,body,del); day.appendChild(row);
+    });
+    const add=el('button','addev','+ Add event');
+    add.onclick=()=>{TLDATA[di].events.push({t:'',name:'',note:''});tlSave();tlRender();};
+    day.appendChild(add);
+    tb.appendChild(day);
+  });
+  const addDay=el('button','reset'); addDay.textContent='+ Add day'; addDay.style.margin='4px 0 0';
+  addDay.onclick=()=>{TLDATA.push({day:'New day',badge:'',events:[{t:'',name:'',note:''}]});tlSave();tlRender();};
+  tb.appendChild(addDay);
+}
+function tlReset(){if(!confirm('Reset timeline to defaults?'))return;localStorage.removeItem('gp_timeline');TLDATA=tlLoad();tlRender();}
+tlRender();
+
+// Team (editable)
+function teamLoad(){
+  try{const j=JSON.parse(localStorage.getItem('gp_team'));if(j&&typeof j==='object')return j;}catch(e){}
+  return null;
+}
+function teamData(){
+  const saved=teamLoad(); const out={};
+  TEAM.forEach(r=>{
+    if(saved&&Array.isArray(saved[r.role])) out[r.role]=saved[r.role].slice();
+    else out[r.role]=r.names.map(n=>/not assigned/i.test(n)?'':(n==='—'?'':n));
+  });
+  return out;
+}
+let TEAMDATA=teamData();
+function teamSave(){localStorage.setItem('gp_team',JSON.stringify(TEAMDATA));}
+function teamRender(){
+  const teamBody=$('#team-body'); teamBody.innerHTML='';
+  const tbl=el('table');
+  tbl.innerHTML='<thead><tr><th>Role / Activity</th><th>People</th></tr></thead>';
+  const tbody=el('tbody');
+  TEAM.forEach(r=>{
+    const role=r.role;
+    const tr=el('tr');
+    tr.appendChild(el('td','role',role));
+    const td=el('td');
+    (TEAMDATA[role]||[]).forEach((name,idx)=>{
+      td.appendChild(makeNameChip(role,idx,name));
+    });
+    const add=el('button','add-name','+ Add name');
+    add.onclick=()=>{TEAMDATA[role].push('');teamSave();teamRender();
+      // focus the newly added chip
+      const chips=$('#team-body').querySelectorAll('tr');
+    };
+    td.appendChild(add);
+    tr.appendChild(td); tbody.appendChild(tr);
+  });
+  tbl.appendChild(tbody); teamBody.appendChild(tbl);
+}
+function makeNameChip(role,idx,name){
+  const empty=!name||!name.trim();
+  const chip=el('span','ename'+(empty?' empty':''));
+  const txt=el('span','txt'); txt.contentEditable='true'; txt.textContent=name||'';
+  txt.addEventListener('input',()=>{chip.classList.toggle('empty',!txt.textContent.trim());});
+  txt.addEventListener('blur',()=>{TEAMDATA[role][idx]=txt.textContent.trim();teamSave();});
+  txt.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();txt.blur();}});
+  const del=el('button','del','✕'); del.title='Remove';
+  del.onclick=()=>{TEAMDATA[role].splice(idx,1);teamSave();teamRender();};
+  chip.append(txt,del);
+  return chip;
+}
+function teamReset(){if(!confirm('Reset all team assignments to defaults?'))return;localStorage.removeItem('gp_team');TEAMDATA=teamData();teamRender();}
+teamRender();
+
+// Checklist builder
+function matId(cat,i){return `mat__${cat}__${i}`.replace(/[^a-z0-9_]/gi,'');}
+function buildChecklist(container, data, group, withQty){
+  const wrap=$(container);
+  Object.entries(data).forEach(([cat,items])=>{
+    const box=el('div','cat');
+    box.appendChild(el('div','cat-title',`🔸 ${cat}`));
+    const ul=el('ul','items');
+    items.forEach((it,i)=>{
+      const id=`${group}__${cat}__${i}`.replace(/[^a-z0-9_]/gi,'');
+      const li=el('li','item');
+      const cb=el('input'); cb.type='checkbox'; cb.id=id;
+      const checked=localStorage.getItem(id)==='1';
+      cb.checked=checked; if(checked) li.classList.add('done');
+      cb.onchange=()=>{localStorage.setItem(id,cb.checked?'1':'0'); li.classList.toggle('done',cb.checked); updateProgress();};
+      const lab=el('label',null,it); lab.htmlFor=id;
+      li.append(cb,lab);
+      if(withQty){
+        const q=el('input','qty-in'); q.type='text'; q.placeholder='qty'; q.title='Quantity / count';
+        q.value=localStorage.getItem(id+'__qty')||'';
+        q.addEventListener('input',()=>localStorage.setItem(id+'__qty',q.value.trim()));
+        li.append(q);
+      }
+      ul.appendChild(li);
+    });
+    box.appendChild(ul); wrap.appendChild(box);
+  });
+}
+buildChecklist('#materials-body', MATERIALS, 'mat', true);
+buildChecklist('#pointers-body', POINTERS, 'pt', false);
+
+// Export materials to CSV
+function exportMaterialsCSV(){
+  const rows=[['Category','Material','Quantity','Status']];
+  Object.entries(MATERIALS).forEach(([cat,items])=>{
+    items.forEach((it,i)=>{
+      const id=matId(cat,i);
+      const qty=localStorage.getItem(id+'__qty')||'';
+      const status=localStorage.getItem(id)==='1'?'Done':'Pending';
+      rows.push([cat,it,qty,status]);
+    });
+  });
+  const csv=rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\r\n');
+  const stamp=new Date().toISOString().slice(0,10);
+  const blob=new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8;'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob); a.download=`guru-pooja-materials-${stamp}.csv`;
+  document.body.appendChild(a); a.click(); a.remove();
+}
+
+// Menu
+const mb=$('#menu-body');
+MENU.forEach(m=>{
+  const c=el('div','menu-day');
+  c.appendChild(el('h4',null,m.day));
+  m.rows.forEach(r=>c.appendChild(el('div','row',`<b>${r[0]}</b><span>${r[1]}</span>`)));
+  mb.appendChild(c);
+});
+
+// Messages (editable)
+function msgLoad(){try{const j=JSON.parse(localStorage.getItem('gp_messages'));if(Array.isArray(j))return j;}catch(e){} return JSON.parse(JSON.stringify(MESSAGES));}
+let MSGDATA=msgLoad();
+function msgSave(){localStorage.setItem('gp_messages',JSON.stringify(MSGDATA));}
+function msgRender(){
+  const msgBody=$('#messages-body'); msgBody.innerHTML='';
+  MSGDATA.forEach((m,i)=>{
+    const box=el('div','msg');
+    const hd=el('div','msg-hd');
+    const title=el('span','edit'); title.contentEditable='true'; title.textContent=m.title;
+    title.addEventListener('blur',()=>{MSGDATA[i].title=title.textContent.trim();msgSave();});
+    title.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();title.blur();}});
+    const btn=el('button',null,'Copy');
+    const pre=el('pre','edit'); pre.contentEditable='true'; pre.textContent=m.body;
+    pre.addEventListener('blur',()=>{MSGDATA[i].body=pre.textContent;msgSave();});
+    btn.onclick=()=>{navigator.clipboard.writeText(pre.textContent).then(()=>{btn.textContent='Copied ✓';setTimeout(()=>btn.textContent='Copy',1400);});};
+    hd.append(title,btn); box.append(hd,pre);
+    msgBody.appendChild(box);
+  });
+}
+function msgReset(){if(!confirm('Reset all templates to defaults?'))return;localStorage.removeItem('gp_messages');MSGDATA=msgLoad();msgRender();}
+msgRender();
+
+// ---- Registration tracker ----
+const REG_SEED=[["22-May",1],["26-May",1],["2-June",1],["19-June",1],["30-June",4],["2-July",1],["5-July",3],["6-July",4],["7-July",1]];
+function regLoad(){try{const j=JSON.parse(localStorage.getItem('gp_reg'));if(Array.isArray(j))return j;}catch(e){} return REG_SEED.slice();}
+function regSave(d){localStorage.setItem('gp_reg',JSON.stringify(d));}
+let REGDATA=regLoad();
+function regMeta(){
+  const label=localStorage.getItem('gp_reg_label')||'Guru Pooja (17–19 July)';
+  const target=parseInt(localStorage.getItem('gp_reg_target'))||50;
+  return {label,target};
+}
+function regRender(){
+  const {label,target}=regMeta();
+  $('#reg-label').value=label; $('#reg-target').value=target;
+  let cum=0; const rows=REGDATA.map(([d,c])=>{cum+=(+c||0);return[d,+c||0,cum];});
+  const total=cum;
+  // stats
+  $('#reg-total').textContent=total;
+  $('#reg-days').textContent=REGDATA.length;
+  const last=rows[rows.length-1];
+  $('#reg-latest').textContent=last?('+'+last[1]):'—';
+  $('#reg-latest-date').textContent=last?last[0]:'no entries yet';
+  const pct=target?Math.min(100,Math.round(total/target*100)):0;
+  $('#reg-bar').style.width=pct+'%'; $('#reg-pct').textContent=pct+'%';
+  $('#reg-target-cap').textContent='of '+target+' target';
+  // table
+  const tb=$('#reg-tbody'); tb.innerHTML='';
+  rows.forEach((r,i)=>{
+    const tr=el('tr',null,`<td>${r[0]}</td><td style="text-align:right">${r[1]}</td><td style="text-align:right;font-weight:700;color:var(--maroon)">${r[2]}</td><td style="text-align:right"><button data-i="${i}" class="reg-del" style="border:0;background:none;color:#b23;cursor:pointer;font-size:15px">✕</button></td>`);
+    tb.appendChild(tr);
+  });
+  tb.querySelectorAll('.reg-del').forEach(b=>b.onclick=()=>{REGDATA.splice(+b.dataset.i,1);regSave(REGDATA);regRender();});
+  // chart
+  drawRegChart(rows,target);
+}
+function drawRegChart(rows,target){
+  const W=460,H=250,pad={l:36,r:44,t:22,b:66};
+  const iw=W-pad.l-pad.r, ih=H-pad.t-pad.b;
+  const axisY=pad.t+ih;
+  const host=$('#reg-chart');
+  if(!rows.length){host.innerHTML='<div style="color:var(--muted);font-size:13px;padding:30px 0;text-align:center">No entries yet — add a date and count.</div>';return;}
+  const maxDaily=Math.max(1,...rows.map(r=>r[1]));
+  const maxCum=Math.max(1,rows[rows.length-1][2],target);
+  const n=rows.length, bw=Math.min(26,iw/n*0.55);
+  const x=i=>pad.l+iw*(i+0.5)/n;
+  const yB=v=>axisY-(v/maxDaily)*ih*0.9;
+  const yC=v=>axisY-(v/maxCum)*ih*0.9;
+  let bars='',line='',dots='',labels='';
+  rows.forEach((r,i)=>{
+    const px=x(i), bx=px-bw/2, by=yB(r[1]), bh=axisY-by;
+    bars+=`<rect x="${bx.toFixed(1)}" y="${by.toFixed(1)}" width="${bw.toFixed(1)}" height="${Math.max(1,bh).toFixed(1)}" rx="3" fill="var(--saffron)"><title>${r[0]}: ${r[1]}</title></rect>`;
+    bars+=`<text x="${px.toFixed(1)}" y="${(by-4).toFixed(1)}" font-size="10" fill="#8a7d72" text-anchor="middle">${r[1]}</text>`;
+    line+=`${i?'L':'M'}${px.toFixed(1)},${yC(r[2]).toFixed(1)} `;
+    dots+=`<circle cx="${px.toFixed(1)}" cy="${yC(r[2]).toFixed(1)}" r="3" fill="var(--maroon)"><title>Cumulative: ${r[2]}</title></circle>`;
+    labels+=`<text x="${px.toFixed(1)}" y="${(axisY+12).toFixed(1)}" font-size="9" fill="#8a7d72" text-anchor="end" transform="rotate(-45 ${px.toFixed(1)} ${(axisY+12).toFixed(1)})">${r[0]}</text>`;
+  });
+  const tgtY=yC(target);
+  const tgtLine=target<=maxCum?`<line x1="${pad.l}" y1="${tgtY.toFixed(1)}" x2="${W-pad.r}" y2="${tgtY.toFixed(1)}" stroke="#c9a227" stroke-dasharray="4 3" stroke-width="1"/><text x="${(W-pad.r+4).toFixed(1)}" y="${(tgtY+3).toFixed(1)}" font-size="9" fill="#B8860B" text-anchor="start">target ${target}</text>`:'';
+  host.innerHTML=`<svg viewBox="0 0 ${W} ${H}" width="100%" style="max-width:480px;overflow:visible">
+    <line x1="${pad.l}" y1="${axisY}" x2="${W-pad.r}" y2="${axisY}" stroke="#eaddcb"/>
+    ${tgtLine}${bars}
+    <path d="${line}" fill="none" stroke="var(--maroon)" stroke-width="2"/>${dots}${labels}
+  </svg>`;
+}
+$('#reg-add').onclick=()=>{
+  const d=$('#reg-date').value.trim(), c=parseInt($('#reg-count').value);
+  if(!d||isNaN(c)){$('#reg-date').focus();return;}
+  REGDATA.push([d,c]); regSave(REGDATA); $('#reg-date').value='';$('#reg-count').value=''; regRender(); $('#reg-date').focus();
+};
+$('#reg-count').addEventListener('keydown',e=>{if(e.key==='Enter')$('#reg-add').click();});
+$('#reg-label').addEventListener('blur',e=>{localStorage.setItem('gp_reg_label',e.target.value.trim());});
+$('#reg-target').addEventListener('input',e=>{localStorage.setItem('gp_reg_target',e.target.value);regRender();});
+function regClear(){if(!confirm('Clear all registration entries?'))return;REGDATA=[];regSave(REGDATA);regRender();}
+regRender();
+
+// Progress
+function grpProgress(group){
+  const boxes=[...document.querySelectorAll(`input[id^="${group}__"]`)];
+  const done=boxes.filter(b=>b.checked).length;
+  return {done,total:boxes.length};
+}
+function setBar(barId,pctId,g){
+  const {done,total}=grpProgress(g); const p=total?Math.round(done/total*100):0;
+  const bar=$(barId); if(bar)bar.style.width=p+'%';
+  const pct=$(pctId); if(pct)pct.textContent=p+'%';
+  return {done,total};
+}
+function updateProgress(){
+  const m=setBar('#mat-bar','#mat-pct','mat');
+  const p=setBar('#pt-bar','#pt-pct','pt');
+  const done=m.done+p.done, total=m.total+p.total, ov=total?Math.round(done/total*100):0;
+  $('#ov-bar').style.width=ov+'%'; $('#ov-pct').textContent=ov+'%';
+  $('#ov-detail').textContent=`${done} of ${total} checklist items complete (${m.done}/${m.total} materials · ${p.done}/${p.total} execution notes).`;
+}
+function resetGroup(g){
+  if(!confirm('Reset all ticks in this section?'))return;
+  document.querySelectorAll(`input[id^="${g}__"]`).forEach(b=>{b.checked=false;localStorage.setItem(b.id,'0');b.closest('.item').classList.remove('done');});
+  updateProgress();
+}
+updateProgress();
+</script>
+</body>
+</html>

@@ -144,9 +144,46 @@
   .menu-day h4{margin:0;background:linear-gradient(90deg,var(--saffron),var(--saffron-d));color:#fff;padding:10px 16px;font-size:14px}
   .menu-day .row{display:flex;gap:10px;padding:9px 16px;border-top:1px solid #e8eef2;font-size:13px}
   .menu-day .row b{min-width:96px;color:var(--maroon);font-size:12px}
+
+  #gate{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,#20204d,#0F8B8D)}
+  #gate .gate-card{background:#fff;border-radius:16px;padding:30px 30px 26px;width:min(360px,90vw);
+    box-shadow:0 20px 60px rgba(0,0,0,.35);text-align:center}
+  #gate .gate-title{font-size:20px;font-weight:800;color:var(--maroon)}
+  #gate .gate-sub{font-size:13px;color:var(--muted);margin:6px 0 18px}
+  #gate input{width:100%;padding:11px 13px;border:1px solid var(--line);border-radius:10px;font-size:15px;text-align:center}
+  #gate input:focus{outline:none;border-color:var(--saffron);box-shadow:0 0 0 3px rgba(15,139,141,.15)}
+  #gate button{margin-top:12px;width:100%;padding:11px;border:0;border-radius:10px;background:var(--saffron);
+    color:#fff;font-size:15px;font-weight:700;cursor:pointer}
+  #gate button:hover{background:var(--saffron-d)}
+  #gate .gate-err{color:#b23;font-size:12.5px;min-height:16px;margin-top:10px}
 </style>
 </head>
 <body>
+<div id="gate">
+  <div class="gate-card">
+    <div class="gate-title">Guru Pooja — ECITY</div>
+    <div class="gate-sub">Enter the team passphrase to continue</div>
+    <input id="gate-input" type="password" placeholder="Passphrase" autocomplete="off" spellcheck="false">
+    <button id="gate-btn">Enter</button>
+    <div id="gate-err"></div>
+  </div>
+</div>
+<script>
+(function(){
+  var GATE_PASS='ecity2026';   // change this to update the team passphrase
+  var g=document.getElementById('gate');
+  if(localStorage.getItem('gate_ok')==='1'){ g.style.display='none'; return; }
+  var inp=document.getElementById('gate-input'), btn=document.getElementById('gate-btn'), err=document.getElementById('gate-err');
+  function tryEnter(){
+    if(inp.value===GATE_PASS){ localStorage.setItem('gate_ok','1'); g.style.display='none'; }
+    else { err.textContent='Incorrect passphrase'; inp.value=''; inp.focus(); }
+  }
+  btn.onclick=tryEnter;
+  inp.addEventListener('keydown',function(e){ if(e.key==='Enter') tryEnter(); });
+  inp.focus();
+})();
+</script>
 <header class="hero">
   <div class="hero-inner">
     <div>
@@ -314,9 +351,10 @@
     <button class="reset" style="margin-top:4px" onclick="msgReset()">Reset templates to defaults</button>
   </section>
 
-  <div class="foot">Guru Pooja ECITY · consolidated from the planning workbook · checklist state stored locally in your browser.</div>
+  <div class="foot">Guru Pooja ECITY · consolidated from the planning workbook · <span id="sync-status">connecting…</span></div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 /* ---------------- DATA ---------------- */
 const TIMELINE = [
@@ -617,7 +655,7 @@ function buildChecklist(container, data, group, withQty){
       if(withQty){
         const q=el('input','qty-in'); q.type='text'; q.placeholder='qty'; q.title='Quantity / count';
         q.value=localStorage.getItem(id+'__qty')||'';
-        q.addEventListener('input',()=>localStorage.setItem(id+'__qty',q.value.trim()));
+        q.addEventListener('change',()=>localStorage.setItem(id+'__qty',q.value.trim()));
         li.append(q);
       }
       ul.appendChild(li);
@@ -625,8 +663,12 @@ function buildChecklist(container, data, group, withQty){
     box.appendChild(ul); wrap.appendChild(box);
   });
 }
-buildChecklist('#materials-body', MATERIALS, 'mat', true);
-buildChecklist('#pointers-body', POINTERS, 'pt', false);
+function rebuildChecklists(){
+  $('#materials-body').innerHTML=''; $('#pointers-body').innerHTML='';
+  buildChecklist('#materials-body', MATERIALS, 'mat', true);
+  buildChecklist('#pointers-body', POINTERS, 'pt', false);
+}
+rebuildChecklists();
 
 // Export materials to CSV
 function exportMaterialsCSV(){
@@ -749,7 +791,7 @@ $('#reg-add').onclick=()=>{
 };
 $('#reg-count').addEventListener('keydown',e=>{if(e.key==='Enter')$('#reg-add').click();});
 $('#reg-label').addEventListener('blur',e=>{localStorage.setItem('gp_reg_label',e.target.value.trim());});
-$('#reg-target').addEventListener('input',e=>{localStorage.setItem('gp_reg_target',e.target.value);regRender();});
+$('#reg-target').addEventListener('change',e=>{localStorage.setItem('gp_reg_target',e.target.value);regRender();});
 function regClear(){if(!confirm('Clear all registration entries?'))return;REGDATA=[];regSave(REGDATA);regRender();}
 regRender();
 
@@ -778,6 +820,76 @@ function resetGroup(g){
   updateProgress();
 }
 updateProgress();
+
+// ================= SHARED SYNC (Supabase) =================
+// Every editable field is mirrored to one shared table so all viewers
+// see the same live data. Writes go through localStorage.setItem, which
+// we wrap to also upsert to Supabase; realtime pushes changes back.
+const SB_URL='https://qgleucklvkrodgoyzsms.supabase.co';
+const SB_KEY='sb_publishable_UiTXPoAbQRguovsfwGbRrg_yEfrkKcC';
+const SB_TABLE='gp_dashboard_state';
+const SYNC_RE=/^(gp_|mat__|pt__)/;   // keys we share
+
+// Re-apply everything from localStorage (used after remote changes / initial pull)
+function renderAll(){
+  document.querySelectorAll('.meta .v[contenteditable]').forEach(v=>{
+    const s=localStorage.getItem('gp_meta_'+v.dataset.key); if(s!=null && v.textContent!==s) v.textContent=s;
+  });
+  TEAMDATA=teamData(); teamRender();
+  TLDATA=tlLoad(); tlRender();
+  MSGDATA=msgLoad(); msgRender();
+  REGDATA=regLoad(); regRender();
+  rebuildChecklists();
+  updateProgress();
+}
+
+(function initSync(){
+  const status=document.getElementById('sync-status');
+  function setStatus(t,c){ if(status){status.textContent=t; status.style.color=c||'var(--muted)';} }
+  if(!(window.supabase && window.supabase.createClient)){ setStatus('⚠ offline (sync library blocked)','#b23'); return; }
+  const _set=localStorage.setItem.bind(localStorage);
+  const _rem=localStorage.removeItem.bind(localStorage);
+  let applyingRemote=false;
+  const sb=window.supabase.createClient(SB_URL,SB_KEY);
+
+  function push(k,v){ sb.from(SB_TABLE).upsert({id:k,val:v,updated_at:new Date().toISOString()}).then(()=>{},e=>console.warn('sync push',e)); }
+  function del(k){ sb.from(SB_TABLE).delete().eq('id',k).then(()=>{},e=>console.warn('sync del',e)); }
+
+  localStorage.setItem=function(k,v){ _set(k,v); if(!applyingRemote && SYNC_RE.test(k)) push(k,String(v)); };
+  localStorage.removeItem=function(k){ _rem(k); if(!applyingRemote && SYNC_RE.test(k)) del(k); };
+
+  // Defer re-render while the user is actively editing a field
+  let rt=null;
+  function scheduleRender(){
+    clearTimeout(rt);
+    rt=setTimeout(()=>{
+      const ae=document.activeElement;
+      if(ae && (ae.isContentEditable || ae.tagName==='INPUT' || ae.tagName==='TEXTAREA')){ scheduleRender(); return; }
+      try{ renderAll(); }catch(e){ console.warn('renderAll',e); }
+    },450);
+  }
+
+  // Initial pull of shared state
+  sb.from(SB_TABLE).select('id,val').then(({data,error})=>{
+    if(error){ setStatus('⚠ sync error','#b23'); console.warn(error); return; }
+    if(data && data.length){
+      applyingRemote=true;
+      data.forEach(r=>{ if(r.val==null) _rem(r.id); else _set(r.id,r.val); });
+      applyingRemote=false;
+      renderAll();
+    }
+    setStatus('● Live — shared with everyone','var(--ok)');
+  });
+
+  // Realtime: apply changes from other viewers
+  sb.channel('gp_rt').on('postgres_changes',{event:'*',schema:'public',table:SB_TABLE},payload=>{
+    applyingRemote=true;
+    if(payload.eventType==='DELETE'){ if(payload.old&&payload.old.id!=null) _rem(payload.old.id); }
+    else { const r=payload.new; if(r&&r.id!=null){ if(r.val==null) _rem(r.id); else _set(r.id,r.val); } }
+    applyingRemote=false;
+    scheduleRender();
+  }).subscribe(st=>{ if(st==='SUBSCRIBED') setStatus('● Live — shared with everyone','var(--ok)'); });
+})();
 </script>
 </body>
 </html>

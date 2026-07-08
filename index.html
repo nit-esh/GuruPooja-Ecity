@@ -354,7 +354,7 @@
   <div class="foot">Guru Pooja ECITY · consolidated from the planning workbook · <span id="sync-status">connecting…</span></div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script>
 /* ---------------- DATA ---------------- */
 const TIMELINE = [
@@ -522,6 +522,11 @@ Isha Volunteers`},
 const $ = s=>document.querySelector(s);
 const el = (t,c,h)=>{const e=document.createElement(t); if(c)e.className=c; if(h!=null)e.innerHTML=h; return e;};
 
+// Save helpers: write to local storage AND (if connected) the shared database.
+const SYNC_KEYS=/^(gp_|mat__|pt__)/;
+function ssSet(k,v){ try{localStorage.setItem(k,v);}catch(e){} if(window.__sync && SYNC_KEYS.test(k)) window.__sync.push(k,String(v)); }
+function ssRemove(k){ try{localStorage.removeItem(k);}catch(e){} if(window.__sync && SYNC_KEYS.test(k)) window.__sync.del(k); }
+
 // Tabs
 document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('#tabs button').forEach(x=>x.classList.remove('active'));
@@ -534,13 +539,13 @@ document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>{
 document.querySelectorAll('.meta .v[contenteditable]').forEach(v=>{
   const k='gp_meta_'+v.dataset.key;
   const saved=localStorage.getItem(k); if(saved) v.textContent=saved;
-  v.addEventListener('blur',()=>localStorage.setItem(k,v.textContent.trim()));
+  v.addEventListener('blur',()=>ssSet(k,v.textContent.trim()));
 });
 
 // Timeline (editable)
 function tlLoad(){try{const j=JSON.parse(localStorage.getItem('gp_timeline'));if(Array.isArray(j))return j;}catch(e){} return JSON.parse(JSON.stringify(TIMELINE));}
 let TLDATA=tlLoad();
-function tlSave(){localStorage.setItem('gp_timeline',JSON.stringify(TLDATA));}
+function tlSave(){ssSet('gp_timeline',JSON.stringify(TLDATA));}
 function edSpan(cls,val,ph,onsave){
   const s=el('div',cls+' edit'); s.contentEditable='true'; s.textContent=val||''; if(ph)s.dataset.ph=ph;
   s.addEventListener('blur',()=>onsave(s.textContent.trim()));
@@ -579,7 +584,7 @@ function tlRender(){
   addDay.onclick=()=>{TLDATA.push({day:'New day',badge:'',events:[{t:'',name:'',note:''}]});tlSave();tlRender();};
   tb.appendChild(addDay);
 }
-function tlReset(){if(!confirm('Reset timeline to defaults?'))return;localStorage.removeItem('gp_timeline');TLDATA=tlLoad();tlRender();}
+function tlReset(){if(!confirm('Reset timeline to defaults?'))return;ssRemove('gp_timeline');TLDATA=tlLoad();tlRender();}
 tlRender();
 
 // Team (editable)
@@ -596,7 +601,7 @@ function teamData(){
   return out;
 }
 let TEAMDATA=teamData();
-function teamSave(){localStorage.setItem('gp_team',JSON.stringify(TEAMDATA));}
+function teamSave(){ssSet('gp_team',JSON.stringify(TEAMDATA));}
 function teamRender(){
   const teamBody=$('#team-body'); teamBody.innerHTML='';
   const tbl=el('table');
@@ -632,7 +637,7 @@ function makeNameChip(role,idx,name){
   chip.append(txt,del);
   return chip;
 }
-function teamReset(){if(!confirm('Reset all team assignments to defaults?'))return;localStorage.removeItem('gp_team');TEAMDATA=teamData();teamRender();}
+function teamReset(){if(!confirm('Reset all team assignments to defaults?'))return;ssRemove('gp_team');TEAMDATA=teamData();teamRender();}
 teamRender();
 
 // Checklist builder
@@ -649,13 +654,13 @@ function buildChecklist(container, data, group, withQty){
       const cb=el('input'); cb.type='checkbox'; cb.id=id;
       const checked=localStorage.getItem(id)==='1';
       cb.checked=checked; if(checked) li.classList.add('done');
-      cb.onchange=()=>{localStorage.setItem(id,cb.checked?'1':'0'); li.classList.toggle('done',cb.checked); updateProgress();};
+      cb.onchange=()=>{ssSet(id,cb.checked?'1':'0'); li.classList.toggle('done',cb.checked); updateProgress();};
       const lab=el('label',null,it); lab.htmlFor=id;
       li.append(cb,lab);
       if(withQty){
         const q=el('input','qty-in'); q.type='text'; q.placeholder='qty'; q.title='Quantity / count';
         q.value=localStorage.getItem(id+'__qty')||'';
-        q.addEventListener('change',()=>localStorage.setItem(id+'__qty',q.value.trim()));
+        q.addEventListener('change',()=>ssSet(id+'__qty',q.value.trim()));
         li.append(q);
       }
       ul.appendChild(li);
@@ -701,7 +706,7 @@ MENU.forEach(m=>{
 // Messages (editable)
 function msgLoad(){try{const j=JSON.parse(localStorage.getItem('gp_messages'));if(Array.isArray(j))return j;}catch(e){} return JSON.parse(JSON.stringify(MESSAGES));}
 let MSGDATA=msgLoad();
-function msgSave(){localStorage.setItem('gp_messages',JSON.stringify(MSGDATA));}
+function msgSave(){ssSet('gp_messages',JSON.stringify(MSGDATA));}
 function msgRender(){
   const msgBody=$('#messages-body'); msgBody.innerHTML='';
   MSGDATA.forEach((m,i)=>{
@@ -718,13 +723,13 @@ function msgRender(){
     msgBody.appendChild(box);
   });
 }
-function msgReset(){if(!confirm('Reset all templates to defaults?'))return;localStorage.removeItem('gp_messages');MSGDATA=msgLoad();msgRender();}
+function msgReset(){if(!confirm('Reset all templates to defaults?'))return;ssRemove('gp_messages');MSGDATA=msgLoad();msgRender();}
 msgRender();
 
 // ---- Registration tracker ----
 const REG_SEED=[["22-May",1],["26-May",1],["2-June",1],["19-June",1],["30-June",4],["2-July",1],["5-July",3],["6-July",4],["7-July",1]];
 function regLoad(){try{const j=JSON.parse(localStorage.getItem('gp_reg'));if(Array.isArray(j))return j;}catch(e){} return REG_SEED.slice();}
-function regSave(d){localStorage.setItem('gp_reg',JSON.stringify(d));}
+function regSave(d){ssSet('gp_reg',JSON.stringify(d));}
 let REGDATA=regLoad();
 function regMeta(){
   const label=localStorage.getItem('gp_reg_label')||'Guru Pooja (17–19 July)';
@@ -790,8 +795,8 @@ $('#reg-add').onclick=()=>{
   REGDATA.push([d,c]); regSave(REGDATA); $('#reg-date').value='';$('#reg-count').value=''; regRender(); $('#reg-date').focus();
 };
 $('#reg-count').addEventListener('keydown',e=>{if(e.key==='Enter')$('#reg-add').click();});
-$('#reg-label').addEventListener('blur',e=>{localStorage.setItem('gp_reg_label',e.target.value.trim());});
-$('#reg-target').addEventListener('change',e=>{localStorage.setItem('gp_reg_target',e.target.value);regRender();});
+$('#reg-label').addEventListener('blur',e=>{ssSet('gp_reg_label',e.target.value.trim());});
+$('#reg-target').addEventListener('change',e=>{ssSet('gp_reg_target',e.target.value);regRender();});
 function regClear(){if(!confirm('Clear all registration entries?'))return;REGDATA=[];regSave(REGDATA);regRender();}
 regRender();
 
@@ -816,7 +821,7 @@ function updateProgress(){
 }
 function resetGroup(g){
   if(!confirm('Reset all ticks in this section?'))return;
-  document.querySelectorAll(`input[id^="${g}__"]`).forEach(b=>{b.checked=false;localStorage.setItem(b.id,'0');b.closest('.item').classList.remove('done');});
+  document.querySelectorAll(`input[id^="${g}__"]`).forEach(b=>{b.checked=false;ssSet(b.id,'0');b.closest('.item').classList.remove('done');});
   updateProgress();
 }
 updateProgress();
@@ -849,14 +854,14 @@ function renderAll(){
   if(!(window.supabase && window.supabase.createClient)){ setStatus('⚠ offline (sync library blocked)','#b23'); return; }
   const _set=localStorage.setItem.bind(localStorage);
   const _rem=localStorage.removeItem.bind(localStorage);
-  let applyingRemote=false;
   const sb=window.supabase.createClient(SB_URL,SB_KEY);
+  let applyingRemote=false;
 
-  function push(k,v){ sb.from(SB_TABLE).upsert({id:k,val:v,updated_at:new Date().toISOString()}).then(()=>{},e=>console.warn('sync push',e)); }
-  function del(k){ sb.from(SB_TABLE).delete().eq('id',k).then(()=>{},e=>console.warn('sync del',e)); }
+  function push(k,v){ sb.from(SB_TABLE).upsert({id:k,val:v,updated_at:new Date().toISOString()}).then(r=>{ if(r&&r.error) console.warn('sync push',r.error); },e=>console.warn('sync push',e)); }
+  function del(k){ sb.from(SB_TABLE).delete().eq('id',k).then(r=>{ if(r&&r.error) console.warn('sync del',r.error); },e=>console.warn('sync del',e)); }
 
-  localStorage.setItem=function(k,v){ _set(k,v); if(!applyingRemote && SYNC_RE.test(k)) push(k,String(v)); };
-  localStorage.removeItem=function(k){ _rem(k); if(!applyingRemote && SYNC_RE.test(k)) del(k); };
+  // Expose the shared-write hook used by ssSet / ssRemove
+  window.__sync={ push:push, del:del };
 
   // Defer re-render while the user is actively editing a field
   let rt=null;

@@ -956,8 +956,9 @@ function renderAll(){
   const _rem=localStorage.removeItem.bind(localStorage);
   const sb=window.supabase.createClient(SB_URL,SB_KEY);
   let applyingRemote=false;
+  const CLIENT_ID=Math.random().toString(36).slice(2)+'-'+Date.now();
 
-  function push(k,v){ sb.from(SB_TABLE).upsert({id:k,val:v,updated_at:new Date().toISOString()}).then(r=>{ if(r&&r.error) console.warn('sync push',r.error); },e=>console.warn('sync push',e)); }
+  function push(k,v){ sb.from(SB_TABLE).upsert({id:k,val:v,updated_at:new Date().toISOString(),src:CLIENT_ID}).then(r=>{ if(r&&r.error) console.warn('sync push',r.error); },e=>console.warn('sync push',e)); }
   function del(k){ sb.from(SB_TABLE).delete().eq('id',k).then(r=>{ if(r&&r.error) console.warn('sync del',r.error); },e=>console.warn('sync del',e)); }
 
   // Expose the shared-write hook used by ssSet / ssRemove
@@ -969,7 +970,7 @@ function renderAll(){
     clearTimeout(rt);
     rt=setTimeout(()=>{
       const ae=document.activeElement;
-      if(ae && (ae.isContentEditable || ae.tagName==='INPUT' || ae.tagName==='TEXTAREA')){ scheduleRender(); return; }
+      if(ae && (ae.isContentEditable || ae.tagName==='INPUT' || ae.tagName==='TEXTAREA' || ae.tagName==='SELECT')){ scheduleRender(); return; }
       try{ renderAll(); }catch(e){ console.warn('renderAll',e); }
     },450);
   }
@@ -988,6 +989,8 @@ function renderAll(){
 
   // Realtime: apply changes from other viewers
   sb.channel('gp_rt').on('postgres_changes',{event:'*',schema:'public',table:SB_TABLE},payload=>{
+    const row=payload.new||payload.old||{};
+    if(row.src===CLIENT_ID) return;            // ignore our own echoes (prevents self-clobber)
     applyingRemote=true;
     if(payload.eventType==='DELETE'){ if(payload.old&&payload.old.id!=null) _rem(payload.old.id); }
     else { const r=payload.new; if(r&&r.id!=null){ if(r.val==null) _rem(r.id); else _set(r.id,r.val); } }

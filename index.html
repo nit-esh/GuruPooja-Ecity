@@ -88,6 +88,12 @@
     padding:11px 13px;font-family:inherit;font-size:13.5px;line-height:1.5;color:var(--ink);background:#fff}
   #mat-notes:focus{outline:none;border-color:var(--saffron);box-shadow:0 0 0 3px rgba(15,139,141,.12)}
   #mat-notes::placeholder{color:#a3b3bd}
+  select.vol-sel{padding:5px 8px;border:1px solid var(--line);border-radius:7px;font-size:13px;color:var(--maroon);
+    font-weight:600;background:#fff;cursor:pointer;max-width:180px}
+  select.vol-sel:focus{outline:none;border-color:var(--saffron)}
+  select.vol-sel.none{color:#b23;background:#fdece9;border-color:#f5c6bd;font-weight:600}
+  #vol-body td{vertical-align:middle}
+  .vol-actions{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
 
   .tl{position:relative;margin:10px 0 0;padding-left:6px}
   .day{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);margin:14px 0;overflow:hidden}
@@ -211,6 +217,7 @@
   <nav class="tabs" id="tabs">
     <button class="active" data-tab="overview">Overview</button>
     <button data-tab="team">Core Team</button>
+    <button data-tab="volunteers">Volunteers</button>
     <button data-tab="materials">Materials</button>
     <button data-tab="menu">Menu</button>
     <button data-tab="pointers">Execution Notes</button>
@@ -265,6 +272,23 @@
     <div class="team-hint">✏️ Click any name to edit it, use <b>+ Add name</b> to assign more volunteers, and ✕ to remove. Red chips are still unassigned. Changes save automatically.</div>
     <div id="team-body"></div>
     <button class="reset" style="margin-top:12px" onclick="teamReset()">Reset to defaults</button>
+  </section>
+
+  <!-- VOLUNTEERS -->
+  <section class="panel" id="volunteers">
+    <h2><span class="dot"></span>Volunteer assignments</h2>
+    <p class="lead">Roster of volunteers and the role/area each one is assigned to. Add people, pick a role — shared live with everyone.</p>
+    <div class="edit-hint">✏️ Click any Name, Contact or Availability cell to edit. Pick a role from the dropdown. Use <b>+ Add volunteer</b> and ✕ to remove. Changes save automatically.</div>
+    <div class="cards" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))">
+      <div class="card"><h3>Volunteers</h3><div class="stat" id="vol-total">0</div><div class="stat-cap">on the roster</div></div>
+      <div class="card"><h3>Assigned</h3><div class="stat" id="vol-assigned">0</div><div class="stat-cap">have a role</div></div>
+      <div class="card"><h3>Unassigned</h3><div class="stat" id="vol-unassigned">0</div><div class="stat-cap">need a role</div></div>
+    </div>
+    <div class="vol-actions">
+      <button id="vol-add" class="exp-btn" style="background:var(--saffron);color:#fff">+ Add volunteer</button>
+      <button class="exp-btn" onclick="exportVolunteersCSV()">⬇ Export CSV</button>
+    </div>
+    <div id="vol-body"></div>
   </section>
 
   <!-- MATERIALS -->
@@ -651,6 +675,57 @@ function makeNameChip(role,idx,name){
 function teamReset(){if(!confirm('Reset all team assignments to defaults?'))return;ssRemove('gp_team');TEAMDATA=teamData();teamRender();}
 teamRender();
 
+// Volunteers (editable roster)
+const VOL_ROLES=["","Registration","Ushering / head count","Kitchen","Hygiene & Water","Material","AV","Demo support","Chant support","Deepa & flowers","Hall setup","Food / Prasad","Test coordinator","Wind-up"];
+function volLoad(){try{const j=JSON.parse(localStorage.getItem('gp_volunteers'));if(Array.isArray(j))return j;}catch(e){} return [];}
+let VOLDATA=volLoad();
+function volSave(){ssSet('gp_volunteers',JSON.stringify(VOLDATA));}
+function volStats(){
+  const total=VOLDATA.length, assigned=VOLDATA.filter(v=>v.role&&v.role.trim()).length;
+  const t=$('#vol-total'),a=$('#vol-assigned'),u=$('#vol-unassigned');
+  if(t)t.textContent=total; if(a)a.textContent=assigned; if(u)u.textContent=total-assigned;
+}
+function volRender(){
+  const host=$('#vol-body'); if(!host) return;
+  host.innerHTML='';
+  const tbl=el('table');
+  tbl.innerHTML='<thead><tr><th>Name</th><th>Contact</th><th>Assigned role</th><th>Availability</th><th></th></tr></thead>';
+  const tb=el('tbody');
+  if(!VOLDATA.length){ tb.appendChild(el('tr',null,'<td colspan="5" style="color:var(--muted)">No volunteers yet — click “+ Add volunteer”.</td>')); }
+  VOLDATA.forEach((v,i)=>{
+    const tr=el('tr');
+    function cell(field,ph){
+      const td=el('td'); const d=el('div','edit'); d.contentEditable='true'; d.textContent=v[field]||''; d.dataset.ph=ph;
+      d.addEventListener('blur',()=>{VOLDATA[i][field]=d.textContent.trim();volSave();volStats();});
+      d.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();d.blur();}});
+      td.appendChild(d); return td;
+    }
+    const tdR=el('td'); const sel=el('select','vol-sel');
+    VOL_ROLES.forEach(r=>{const o=el('option'); o.value=r; o.textContent=r===''?'— Unassigned —':r; if((v.role||'')===r)o.selected=true; sel.appendChild(o);});
+    if(!(v.role||'').trim()) sel.classList.add('none');
+    sel.addEventListener('change',()=>{VOLDATA[i].role=sel.value;sel.classList.toggle('none',!sel.value);volSave();volStats();});
+    tdR.appendChild(sel);
+    const tdX=el('td'); const x=el('button','day-del','✕'); x.title='Remove'; x.onclick=()=>{VOLDATA.splice(i,1);volSave();volRender();};
+    tdX.appendChild(x);
+    tr.append(cell('name','name'),cell('contact','phone / email'),tdR,cell('days','days / times'),tdX);
+    tb.appendChild(tr);
+  });
+  tbl.appendChild(tb); host.appendChild(tbl);
+  volStats();
+}
+const volAddBtn=$('#vol-add');
+if(volAddBtn) volAddBtn.onclick=()=>{VOLDATA.push({name:'',contact:'',role:'',days:''});volSave();volRender();};
+function exportVolunteersCSV(){
+  const rows=[['Name','Contact','Assigned role','Availability']];
+  VOLDATA.forEach(v=>rows.push([v.name||'',v.contact||'',v.role||'',v.days||'']));
+  const csv=rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(',')).join('\r\n');
+  const blob=new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8;'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob); a.download=`guru-pooja-volunteers-${new Date().toISOString().slice(0,10)}.csv`;
+  document.body.appendChild(a); a.click(); a.remove();
+}
+volRender();
+
 // Checklist builder
 function matId(cat,i){return `mat__${cat}__${i}`.replace(/[^a-z0-9_]/gi,'');}
 function buildChecklist(container, data, group, withQty){
@@ -864,6 +939,7 @@ function renderAll(){
     const s=localStorage.getItem('gp_meta_'+v.dataset.key); if(s!=null && v.textContent!==s) v.textContent=s;
   });
   TEAMDATA=teamData(); teamRender();
+  VOLDATA=volLoad(); volRender();
   TLDATA=tlLoad(); tlRender();
   MSGDATA=msgLoad(); msgRender();
   REGDATA=regLoad(); regRender();
